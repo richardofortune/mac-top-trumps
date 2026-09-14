@@ -38,4 +38,12 @@ what you paste.
 
 Same rubric on every Mac, so cards are comparable.
 
+## Look and feel
+
+The prompt carries a fixed style guide (palette, border, type, illustration
+style, layout order) so cards from different people look like one set. Only
+the numbers, the illustration content and the border colour change. Border
+colour follows rarity: navy for COMMON, red for RARE, gold for LEGENDARY
+(any stat at 100).
+
 Requires macOS and Python 3 (preinstalled). No dependencies.

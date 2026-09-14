@@ -96,22 +96,30 @@ def prompt(d, name):
     hi = max(s.values())
     rarity = "LEGENDARY" if hi == 100 else "RARE" if hi >= 80 else "COMMON"
     rows = "\n".join(f"  {k:<14} {v:>3}" for k, v in s.items())
-    return f"""Create a single Top Trumps style trading card, portrait, 2:3 aspect ratio. Retro 1980s British Top Trumps look: thick coloured border, flat bold colours, slight halftone print texture, chunky sans-serif type. Render ALL text below exactly as written, no extra words, no typos.
+    border = {"LEGENDARY": "gold #E9C46A", "RARE": "red #D62828", "COMMON": "navy #1D3557"}[rarity]
+    return f"""Create ONE Top Trumps style trading card as a single image. Follow this style guide exactly so the card matches a set.
 
-TOP BANNER (large, uppercase): {name}
-SUB-LABEL under the banner (small): {rarity} · {d['from']} to {d['to']}
+FORMAT: portrait, 2:3 aspect ratio, card fills the whole image, rounded corners, flat front-on view, no perspective, no hand holding it, no background scene.
 
-ILLUSTRATION (upper half): a caricature of a computer user at a desk, {'lit only by monitor glow at night' if s['NIGHT OWL'] >= 60 else 'in bright daylight'}, {top} open on screen, {'dozens of' if s['TOOLBELT'] >= 80 else 'a few'} app icons floating around them. Comic-book style, no photorealism.
+STYLE GUIDE (fixed for every card in the set):
+- Palette, use ONLY these colours: cream #F4E9C8 (card face), navy #1D3557 (text, outlines, banner), red #D62828 (stat bars), yellow #FFD166 (banner text), teal #2A9D8F and mustard #E9C46A (illustration accents), black outlines.
+- Border: thick {border} border, about 5% of card width, with rounded corners.
+- Card face: cream with a faint halftone dot print texture.
+- Type: heavy geometric sans-serif (like Futura Extra Bold or Arial Black), all caps, navy. No serif fonts, no script fonts.
+- Illustration style: flat vector cartoon, thick black outlines, limited palette from the list above, no gradients, no photorealism, no text or logos inside the illustration.
+- No watermarks, no extra decoration, no text other than what is listed below. Render all text exactly as written, no typos.
 
-STATS PANEL (lower half): 7 rows, each with the stat name on the left, the number on the right, and a horizontal bar filled to that value out of 100:
+LAYOUT, top to bottom:
+1. BANNER: full-width navy rounded rectangle, yellow all-caps text: {name}
+2. SUB-LABEL: small navy caps, centred: {rarity} · {d['from']} to {d['to']}
+3. ILLUSTRATION: navy-outlined rounded panel, about 30% of card height. Content: a cartoon computer user at a desk, {'lit by monitor glow with a dark navy night sky behind' if s['NIGHT OWL'] >= 60 else 'in a bright cream daytime room'}, a monitor showing {top}, {'dozens of' if s['TOOLBELT'] >= 80 else 'a handful of'} small square app icons floating around their head.
+4. STATS PANEL: 7 rows. Each row: stat name in navy caps on the left, the number in navy on the right, then a horizontal bar with navy outline on cream, filled red from the left to the value out of 100.
 {rows}
-
-BOTTOM BOX (small type):
+5. BOTTOM BOX: cream rounded rectangle with navy outline, three lines of small navy text:
   SIGNATURE MOVE: {move}
   WEAKNESS: {weak}
   RARE LOOT: {loot}
-
-Footer (tiny): {d['total_hours']}h foreground · {d['active_days']} active days · {d['switches_per_hour']:.0f} app switches/hour
+6. FOOTER: tiny navy caps, centred: {d['total_hours']}h foreground · {d['active_days']} active days · {d['switches_per_hour']:.0f} app switches/hour
 """
 
 
