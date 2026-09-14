@@ -2,6 +2,8 @@
 
 Turn your Mac's app-usage log into a Top Trumps card.
 
+<img src="sample-card.png" width="360" alt="Sample card: The 9pm Compiler">
+
 macOS keeps about four weeks of "which app was in front, and when" in
 `~/Library/Application Support/Knowledge/knowledgeC.db`. This script reads
 it, scores you on seven stats, and prints a prompt you paste into ChatGPT
