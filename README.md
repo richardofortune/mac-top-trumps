@@ -19,7 +19,9 @@ image generation to get the card.
    python3 mactrumps.py --name "THE 9PM COMPILER"
    ```
 
-3. Paste the output into ChatGPT and ask for the image.
+3. Paste the output into ChatGPT and ask for the image. For the closest
+   match to the set, attach `sample-card.png` to the same message and add
+   "match this card's style".
 
 `--json` prints the raw numbers instead. Nothing leaves your machine except
 what you paste.
