@@ -60,10 +60,15 @@ def load(db):
     return d
 
 
-def app(bundle):  # com.microsoft.VSCode -> VSCode, com.brave.Browser -> brave
+NAMES = {"VSCode": "VS Code", "SoftwareUpdateNotification": "Software Update", "utweb": "uTorrent",
+         "drivefs": "Google Drive", "optionsplus": "Logi Options+", "crealityprint": "Creality Print"}
+
+
+def app(bundle):  # com.microsoft.VSCode -> VS Code, com.brave.Browser -> Brave
     parts = bundle.split(".")
     last = re.sub(r"[_-].*", "", parts[-1])
-    return parts[-2] if last in ("App", "Electron", "Browser", "chat") else last
+    name = parts[-2] if last in ("App", "Electron", "Browser", "chat") else last
+    return NAMES.get(name) or name[0].upper() + name[1:]  # brave -> Brave, MeshInspector stays
 
 
 def stats(d):
@@ -86,8 +91,8 @@ def prompt(d, name):
     t = d["top_transition"]
     move = f"{app(t['a'])} <-> {app(t['b'])} tab-flip, {t['n']} times"
     n = d["top_notification"]
-    weak = f"{app(n['app']).replace('Notification', '')} notification, ignored {n['n']} times" if n else "none recorded"
-    loot = ", ".join(app(x) for x in d["rare_apps"] if not x.startswith("com.apple"))[:60].rsplit(", ", 1)[0] or "none"
+    weak = f"{app(n['app'])} notification, ignored {n['n']} times" if n else "none recorded"
+    loot = ", ".join(app(x) for x in d["rare_apps"] if not x.startswith("com.apple"))[:40].rsplit(", ", 1)[0] or "none"
     hi = max(s.values())
     rarity = "LEGENDARY" if hi == 100 else "RARE" if hi >= 80 else "COMMON"
     rows = "\n".join(f"  {k:<14} {v:>3}" for k, v in s.items())
