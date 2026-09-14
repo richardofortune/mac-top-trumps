@@ -95,31 +95,38 @@ def prompt(d, name):
     loot = ", ".join(app(x) for x in d["rare_apps"] if not x.startswith("com.apple"))[:40].rsplit(", ", 1)[0] or "none"
     hi = max(s.values())
     rarity = "LEGENDARY" if hi == 100 else "RARE" if hi >= 80 else "COMMON"
-    rows = "\n".join(f"  {k:<14} {v:>3}" for k, v in s.items())
-    border = {"LEGENDARY": "gold #E9C46A", "RARE": "red #D62828", "COMMON": "navy #1D3557"}[rarity]
+    night = s["NIGHT OWL"] >= 60
+    scene = (f"a caricature of a computer user at a desk, {'lit by monitor glow with a night-time city window behind' if night else 'in a bright daytime room with a sunny window'}, "
+             f"two monitors, one showing {top}, the other a web browser, "
+             f"{'shelves crammed with gadgets and dozens of app icons and stickers everywhere' if s['TOOLBELT'] >= 80 else 'a tidy desk with a few app icons'}, "
+             f"{'headphones round the neck' if d['messaging_pct'] < 15 else 'a phone buzzing with message notifications'}, a coffee mug.")
+    border = {"LEGENDARY": "yellow #FFD60A", "RARE": "red #D62828", "COMMON": "navy #1D3557"}[rarity]
+    colours = ["blue #1E90FF", "purple #8A2BE2", "green #3CB043", "orange #FF8C00", "yellow #FFD60A", "pink #E63976", "red #E63946"]
+    rows = "\n".join(f"  {k:<14} {v:>3}   (bar colour {c})" for (k, v), c in zip(s.items(), colours))
     return f"""Create ONE Top Trumps style trading card as a single image. Follow this style guide exactly so the card matches a set.
 
-FORMAT: portrait, 2:3 aspect ratio, card fills the whole image, rounded corners, flat front-on view, no perspective, no hand holding it, no background scene.
+FORMAT: portrait, 2:3 aspect ratio, card fills the whole image, rounded corners, flat front-on view, no perspective, no hand holding it, no background scene. Slight worn-print halftone texture over the whole card.
 
 STYLE GUIDE (fixed for every card in the set):
-- Palette, use ONLY these colours: cream #F4E9C8 (card face), navy #1D3557 (text, outlines, banner), red #D62828 (stat bars), yellow #FFD166 (banner text), teal #2A9D8F and mustard #E9C46A (illustration accents), black outlines.
-- Border: thick {border} border, about 5% of card width, with rounded corners.
-- Card face: cream with a faint halftone dot print texture.
-- Type: heavy geometric sans-serif (like Futura Extra Bold or Arial Black), all caps, navy. No serif fonts, no script fonts.
-- Illustration style: flat vector cartoon, thick black outlines, limited palette from the list above, no gradients, no photorealism, no text or logos inside the illustration.
-- No watermarks, no extra decoration, no text other than what is listed below. Render all text exactly as written, no typos.
+- Border: thick {border} border, about 4% of card width, rounded corners. Every panel inside has a thin black outline.
+- Banner: red #D62828 panel across the top, card name in huge condensed heavy sans-serif (Impact-like), yellow #FFD60A fill with black outline.
+- Sub-label: cream panel directly under the banner, black condensed caps.
+- Card face and text panels: cream #F4E9C8. All body text black, condensed heavy sans-serif for labels, regular sans-serif for values.
+- Illustration: detailed comic-book ink-and-colour style, visible linework, rich colour, a full scene not a flat icon. Small readable text on props (mugs, posters, sticky notes) is fine. No logos of real companies except app UI on screens.
+- Stats: each row is a rounded bar with a dark grey #333333 track and a black outline, filled from the left in the colour given for that stat, the number in black to the right of the bar.
+- No watermarks, no extra decoration, no text other than what is listed below and small prop text in the illustration. Render all listed text exactly as written, no typos.
 
 LAYOUT, top to bottom:
-1. BANNER: full-width navy rounded rectangle, yellow all-caps text: {name}
-2. SUB-LABEL: small navy caps, centred: {rarity} · {d['from']} to {d['to']}
-3. ILLUSTRATION: navy-outlined rounded panel, about 30% of card height. Content: a cartoon computer user at a desk, {'lit by monitor glow with a dark navy night sky behind' if s['NIGHT OWL'] >= 60 else 'in a bright cream daytime room'}, a monitor showing {top}, {'dozens of' if s['TOOLBELT'] >= 80 else 'a handful of'} small square app icons floating around their head.
-4. STATS PANEL: 7 rows. Each row: stat name in navy caps on the left, the number in navy on the right, then a horizontal bar with navy outline on cream, filled red from the left to the value out of 100.
+1. BANNER: {name}
+2. SUB-LABEL: {rarity} · {d['from']} to {d['to']}
+3. ILLUSTRATION, about 40% of card height: {scene}
+4. STATS PANEL: 7 rows, stat name on the left, coloured bar in the middle, number on the right:
 {rows}
-5. BOTTOM BOX: cream rounded rectangle with navy outline, three lines of small navy text:
+5. BOTTOM BOX: cream rounded rectangle with black outline, three lines, label in bold caps then value:
   SIGNATURE MOVE: {move}
   WEAKNESS: {weak}
   RARE LOOT: {loot}
-6. FOOTER: tiny navy caps, centred: {d['total_hours']}h foreground · {d['active_days']} active days · {d['switches_per_hour']:.0f} app switches/hour
+6. FOOTER: small black text, centred: {d['total_hours']}h foreground · {d['active_days']} active days · {d['switches_per_hour']:.0f} app switches/hour
 """
 
 
