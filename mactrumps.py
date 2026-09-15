@@ -60,7 +60,7 @@ def load(db):
     return d
 
 
-NAMES = {"VSCode": "VS Code", "SoftwareUpdateNotification": "Software Update", "utweb": "uTorrent",
+NAMES = {"VSCode": "VS Code", "SoftwareUpdateNotification": "Software Update",
          "drivefs": "Google Drive", "optionsplus": "Logi Options+", "crealityprint": "Creality Print"}
 
 
